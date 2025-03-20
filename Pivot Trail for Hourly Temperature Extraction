@@ -1,0 +1,70 @@
+// Define Papua New Guinea point and create buffer
+var pngPoint = ee.Feature(ee.Geometry.Point([147.2, -6.3]), {name: 'Papua New Guinea'});
+var png = pngPoint.buffer(200000).set('name', 'Papua New Guinea');
+
+// Define the date range for one week
+var startDate = '2011-01-01';
+var endDate = '2011-01-08';
+
+// Load the ERA5 Land Hourly dataset for temperature
+var era5Land = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
+  .filterDate(startDate, endDate)
+  .select('temperature_2m');
+
+// Function to convert Kelvin to Celsius
+var kelvinToCelsius = function(image) {
+  var tempCelsius = image.select('temperature_2m').subtract(273.15).rename('temp_celsius');
+  return image.addBands(tempCelsius);
+};
+
+// Apply the conversion to the collection
+var era5Celsius = era5Land.map(kelvinToCelsius);
+
+// Function to extract hourly data for the region
+var extractHourlyData = function() {
+  var hourlyData = era5Celsius.map(function(image) {
+    var stats = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: png.geometry(),
+      scale: 25000,
+      maxPixels: 1e9
+    });
+    
+    return ee.Feature(null, {
+      'country': 'Papua New Guinea',
+      'datetime': image.date().format('YYYY-MM-dd HH:mm:ss'),
+      'temperature_celsius': stats.get('temp_celsius')
+    });
+  });
+  
+  return hourlyData;
+};
+
+// Extract the data
+var hourlyResults = extractHourlyData();
+
+// Export the results
+Export.table.toDrive({
+  collection: hourlyResults,
+  description: 'PNG_hourly_temp_pivot_2011',
+  fileFormat: 'CSV'
+});
+
+// Visualize the most recent temperature data
+var recent = era5Celsius.select('temp_celsius').first();
+
+var tempVis = {
+  min: 15,
+  max: 35,
+  palette: ['blue', 'cyan', 'green', 'yellow', 'red']
+};
+
+// Add layers to the map
+Map.centerObject(png, 6);
+Map.addLayer(recent, tempVis, 'Sample Temperature');
+Map.addLayer(png, {color: 'white'}, 'Papua New Guinea');
+
+// Print information
+print('Date Range:', startDate, 'to', endDate);
+print('Country:', 'Papua New Guinea');
+print('Sample of Results (first 10):', hourlyResults.limit(10));
