@@ -1,0 +1,186 @@
+// Define Pitcairn Island point and create 10km buffer
+var pitcairnPoint = ee.Feature(ee.Geometry.Point([-130.1, -25.07]), {name: 'Pitcairn Island'});
+var pitcairn = pitcairnPoint.buffer(10000).set('name', 'Pitcairn Island'); // 10km buffer (10,000 meters)
+
+// Set date range
+var startDate = '2011-01-01';
+var endDate = '2011-01-08';
+
+// Daily mean 2m air temperature
+var era5_2mt = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                   .select('mean_2m_air_temperature')
+                   .filter(ee.Filter.date(startDate, endDate));
+
+// Daily total precipitation sums
+var era5_tp = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('total_precipitation')
+                  .filter(ee.Filter.date(startDate, endDate));
+
+// Daily mean 2m dewpoint temperature
+var era5_2d = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('dewpoint_2m_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+
+// Daily mean sea-level pressure
+var era5_mslp = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                    .select('mean_sea_level_pressure')
+                    .filter(ee.Filter.date(startDate, endDate));
+
+// Daily mean surface pressure
+var era5_sp = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('surface_pressure')
+                  .filter(ee.Filter.date(startDate, endDate));
+
+// Daily mean 10m u-component of wind
+var era5_u_wind_10m = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                          .select('u_component_of_wind_10m')
+                          .filter(ee.Filter.date(startDate, endDate));
+
+// Convert pressure levels from Pa to hPa - Example for surface pressure
+var era5_sp = era5_sp.map(function(image) {
+  return image.divide(100).set(
+      'system:time_start', image.get('system:time_start'));
+});
+
+// Function to convert Kelvin to Celsius for temperature data
+var kelvinToCelsius = function(image) {
+  return image.subtract(273.15).set(
+      'system:time_start', image.get('system:time_start'));
+};
+
+// Apply Kelvin to Celsius conversion
+var era5_2mt_celsius = era5_2mt.map(kelvinToCelsius);
+var era5_2d_celsius = era5_2d.map(kelvinToCelsius);
+
+// Visualization palette for total precipitation
+var visTp = {
+  min: 0.0,
+  max: 0.1,
+  palette: ['ffffff', '00ffff', '0080ff', 'da00ff', 'ffa400', 'ff0000']
+};
+
+// Visualization palette for temperature (modified for Celsius)
+var visTempC = {
+  min: 15,
+  max: 35,
+  palette: [
+    '000080', '0000d9', '4000ff', '8000ff', '0080ff', '00ffff', '00ff80',
+    '80ff00', 'daff00', 'ffff00', 'fff500', 'ffda00', 'ffb000', 'ffa400',
+    'ff4f00', 'ff2500', 'ff0a00', 'ff00ff'
+  ]
+};
+
+// Visualization palette for u- and v-component of 10m wind
+var visWind = {
+  min: 0,
+  max: 30,
+  palette: [
+    'ffffff', 'ffff71', 'deff00', '9eff00', '77b038', '007e55', '005f51',
+    '004b51', '013a7b', '023aad'
+  ]
+};
+
+// Visualization palette for pressure (surface pressure, mean sea level pressure)
+var visPressure = {
+  min: 990,
+  max: 1030,  // Adjusted for tropical regions
+  palette: [
+    '01ffff', '058bff', '0600ff', 'df00ff', 'ff00ff', 'ff8c00', 'ff8c00'
+  ]
+};
+
+// Function to extract data for Pitcairn Island with the 10km buffer
+var extractRegionalData = function(collection, bandName) {
+  var regionalData = collection.map(function(image) {
+    var stats = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: pitcairn.geometry(),  // Using the buffered geometry
+      scale: 10000,
+      maxPixels: 1e9
+    });
+    
+    return ee.Feature(null, {
+      'country': 'Pitcairn Island',
+      'date': image.date().format('YYYY-MM-dd'),
+      'value': stats.get(bandName)
+    });
+  });
+  
+  return regionalData;
+};
+
+// Extract data for each variable
+var temperature_data = extractRegionalData(era5_2mt_celsius, 'mean_2m_air_temperature');
+var precipitation_data = extractRegionalData(era5_tp, 'total_precipitation');
+var dewpoint_data = extractRegionalData(era5_2d_celsius, 'dewpoint_2m_temperature');
+var pressure_data = extractRegionalData(era5_sp, 'surface_pressure');
+var wind_data = extractRegionalData(era5_u_wind_10m, 'u_component_of_wind_10m');
+
+// Export the data to Drive
+Export.table.toDrive({
+  collection: temperature_data,
+  description: 'PitcairnIsland_temperature_20110101_20110108',
+  fileFormat: 'CSV'
+});
+
+Export.table.toDrive({
+  collection: precipitation_data,
+  description: 'PitcairnIsland_precipitation_20110101_20110108',
+  fileFormat: 'CSV'
+});
+
+// Sample date for visualization (January 4, 2011)
+var sampleDate = '2011-01-04';
+
+// Add layers to map
+Map.centerObject(pitcairn, 5);  // Centered on Pitcairn Island with appropriate zoom
+
+// Add Pitcairn Island buffer outline
+Map.addLayer(pitcairn, {color: 'white'}, 'Pitcairn Island (10km buffer)');
+
+// Add temperature layer
+Map.addLayer(
+    era5_2mt_celsius.filter(ee.Filter.date(sampleDate)), visTempC,
+    'Daily mean 2m air temperature (°C)');
+
+// Add precipitation layer
+Map.addLayer(
+    era5_tp.filter(ee.Filter.date(sampleDate)), visTp,
+    'Daily total precipitation');
+
+// Add dewpoint temperature layer
+Map.addLayer(
+    era5_2d_celsius.filter(ee.Filter.date(sampleDate)), visTempC,
+    'Daily mean 2m dewpoint temperature (°C)');
+
+// Add wind layer
+Map.addLayer(
+    era5_u_wind_10m.filter(ee.Filter.date(sampleDate)), visWind,
+    'Daily mean 10m u-component of wind');
+
+// Add surface pressure layer
+Map.addLayer(
+    era5_sp.filter(ee.Filter.date(sampleDate)), visPressure,
+    'Daily mean surface pressure (hPa)');
+
+// Print sample values for each variable at Pitcairn Island
+var sampleTemp = era5_2mt_celsius.filter(ee.Filter.date(sampleDate)).first()
+  .reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: pitcairn.geometry(),
+    scale: 10000,
+    maxPixels: 1e9
+  });
+
+var samplePrecip = era5_tp.filter(ee.Filter.date(sampleDate)).first()
+  .reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: pitcairn.geometry(),
+    scale: 10000,
+    maxPixels: 1e9
+  });
+
+print('Pitcairn Island Data Sample (' + sampleDate + '):');
+print('Temperature (°C):', sampleTemp.get('mean_2m_air_temperature'));
+print('Precipitation (m):', samplePrecip.get('total_precipitation'));
+print('Extracted data points:', temperature_data.size());
