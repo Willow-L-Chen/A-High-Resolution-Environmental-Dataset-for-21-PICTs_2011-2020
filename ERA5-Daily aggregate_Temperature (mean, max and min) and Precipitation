@@ -1,0 +1,144 @@
+// Define the 23 Pacific Island countries with their coordinates
+var pacificIslands = ee.FeatureCollection([
+  ee.Feature(ee.Geometry.Point([-170.7, -14.3]), {name: 'American Samoa'}),
+  ee.Feature(ee.Geometry.Point([-159.8, -21.2]), {name: 'Cook Islands'}),
+  ee.Feature(ee.Geometry.Point([158.2, 6.9]), {name: 'Micronesia'}),
+  ee.Feature(ee.Geometry.Point([178.1, -17.7]), {name: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([-149.4, -17.6]), {name: 'French Polynesia'}),
+  ee.Feature(ee.Geometry.Point([144.8, 13.4]), {name: 'Guam'}),
+  ee.Feature(ee.Geometry.Point([173.0, 1.4]), {name: 'Kiribati'}),
+  ee.Feature(ee.Geometry.Point([171.2, 7.1]), {name: 'Marshall Islands'}),
+  ee.Feature(ee.Geometry.Point([145.7, 15.2]), {name: 'Northern Mariana Islands'}),
+  ee.Feature(ee.Geometry.Point([166.9, -0.5]), {name: 'Nauru'}),
+  ee.Feature(ee.Geometry.Point([165.6, -21.3]), {name: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([174.9, -40.9]), {name: 'New Zealand'}),
+  ee.Feature(ee.Geometry.Point([-169.9, -19.1]), {name: 'Niue'}),
+  ee.Feature(ee.Geometry.Point([145.2, -6.3]), {name: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([134.5, 7.5]), {name: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([-130.1, -25.07]), {name: 'Pitcairn Islands'}),
+  ee.Feature(ee.Geometry.Point([-172.1, -13.6]), {name: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([160.2, -9.6]), {name: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([-171.8, -9.2]), {name: 'Tokelau'}),
+  ee.Feature(ee.Geometry.Point([-175.2, -21.2]), {name: 'Tonga'}),
+  ee.Feature(ee.Geometry.Point([178.7, -7.1]), {name: 'Tuvalu'}),
+  ee.Feature(ee.Geometry.Point([166.9, -15.4]), {name: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([-178.1, -14.3]), {name: 'Wallis & Futuna'})
+]);
+
+// Create 10km buffer around each country point
+var bufferedIslands = pacificIslands.map(function(feature) {
+  return feature.buffer(10000).set('name', feature.get('name'));
+});
+
+// Set date range
+var startDate = '2012-01-02';
+var endDate = '2012-12-31';
+
+// Daily mean 2m air temperature
+var era5_2mt = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('mean_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+
+// Daily max 2m air temperature
+var era5_2mt_max = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('maximum_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+                  
+// Daily min 2m air temperature
+var era5_2mt_min = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('minimum_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+                  
+// Daily total precipitation sums
+var era5_tp = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                 .select('total_precipitation')
+                 .filter(ee.Filter.date(startDate, endDate));
+
+// Function to convert Kelvin to Celsius for temperature data
+var kelvinToCelsius = function(image) {
+  return image.subtract(273.15).set(
+      'system:time_start', image.get('system:time_start'));
+};
+
+// Apply Kelvin to Celsius conversion for all temperature datasets
+var era5_2mt_celsius = era5_2mt.map(kelvinToCelsius);
+var era5_2mt_max_celsius = era5_2mt_max.map(kelvinToCelsius);
+var era5_2mt_min_celsius = era5_2mt_min.map(kelvinToCelsius);
+
+// Function to extract data for a single image and all islands
+var extractDataForImage = function(image, bandName) {
+  var date = ee.Date(image.get('system:time_start')).format('YYYY-MM-dd');
+  
+  // Extract data for each island
+  var islandsData = bufferedIslands.map(function(island) {
+    var stats = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: island.geometry(),
+      scale: 10000,
+      maxPixels: 1e9
+    });
+    
+    return ee.Feature(null, {
+      'country': island.get('name'),
+      'date': date,
+      'value': stats.get(bandName)
+    });
+  });
+  
+  return islandsData;
+};
+
+// Extract mean temperature data for all images
+var meanTempData = era5_2mt_celsius.map(function(image) {
+  return extractDataForImage(image, 'mean_2m_air_temperature');
+}).flatten();
+
+// Extract max temperature data for all images
+var maxTempData = era5_2mt_max_celsius.map(function(image) {
+  return extractDataForImage(image, 'maximum_2m_air_temperature');
+}).flatten();
+
+// Extract min temperature data for all images
+var minTempData = era5_2mt_min_celsius.map(function(image) {
+  return extractDataForImage(image, 'minimum_2m_air_temperature');
+}).flatten();
+
+// Extract precipitation data for all images
+var precipitationData = era5_tp.map(function(image) {
+  return extractDataForImage(image, 'total_precipitation');
+}).flatten();
+
+// Export mean temperature data
+Export.table.toDrive({
+  collection: meanTempData,
+  description: 'PICT_mean_temperature_2012',
+  fileFormat: 'CSV'
+});
+
+// Export max temperature data
+Export.table.toDrive({
+  collection: maxTempData,
+  description: 'PICT_max_temperature_2012',
+  fileFormat: 'CSV'
+});
+
+// Export min temperature data
+Export.table.toDrive({
+  collection: minTempData,
+  description: 'PICT_min_temperature_2012',
+  fileFormat: 'CSV'
+});
+
+// Export precipitation data
+Export.table.toDrive({
+  collection: precipitationData,
+  description: 'PICT_precipitation_2012',
+  fileFormat: 'CSV'
+});
+
+// Print summary information
+print('Number of islands:', bufferedIslands.size());
+print('Number of mean temperature data points:', meanTempData.size());
+print('Number of max temperature data points:', maxTempData.size());
+print('Number of min temperature data points:', minTempData.size());
+print('Number of precipitation data points:', precipitationData.size());
