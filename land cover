@@ -1,0 +1,147 @@
+var pacificIslands = ee.FeatureCollection([
+  ee.Feature(ee.Geometry.Point([-170.7046, -14.274]), {name: 'Pago Pago', country: 'American Samoa'}),
+  ee.Feature(ee.Geometry.Point([-159.771, -21.207]), {name: 'Avarua', country: 'Cook Islands'}),
+  ee.Feature(ee.Geometry.Point([178.4419, -18.1416]), {name: 'Suva', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.4167, -17.8]), {name: 'Nadi', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.5454, -18.0244]), {name: 'Nausori', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.4528, -17.6242]), {name: 'Lautoka', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([179.3703, -16.4311]), {name: 'Labasa', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.4167, -18.1167]), {name: 'Lami', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.5167, -18.0667]), {name: 'Nakasi', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.6833, -17.5333]), {name: 'Ba', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.5069, -18.1414]), {name: 'Sigatoka', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([-149.5667, -17.5334]), {name: 'Papeete', country: 'French Polynesia'}),
+  ee.Feature(ee.Geometry.Point([144.7332, 13.4692]), {name: 'Maina', country: 'Guam'}),
+  ee.Feature(ee.Geometry.Point([144.7504, 13.4745]), {name: 'Hagatna', country: 'Guam'}),
+  ee.Feature(ee.Geometry.Point([173.0176, 1.3382]), {name: 'Tarawa', country: 'Kiribati'}),
+  ee.Feature(ee.Geometry.Point([172.9333, 1.35]), {name: 'Betio', country: 'Kiribati'}),
+  ee.Feature(ee.Geometry.Point([171.3833, 7.0833]), {name: 'Majuro', country: 'Marshall Islands'}),
+  ee.Feature(ee.Geometry.Point([151.8583, 7.4417]), {name: 'Weno', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([158.1589, 6.9172]), {name: 'Palikir', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([158.2081, 6.9639]), {name: 'Kolonia', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([138.1333, 9.5167]), {name: 'Colonia', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([163.0086, 5.3258]), {name: 'Tofol', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([166.9209, -0.5477]), {name: 'Yaren', country: 'Nauru'}),
+  ee.Feature(ee.Geometry.Point([166.458, -22.2758]), {name: 'Noumea', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.45, -22.15]), {name: 'Dumbea', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.4665, -22.2157]), {name: 'Mont-Dore', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.3505, -22.1337]), {name: 'Paita', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([164.8518, -21.059]), {name: 'Kone', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([-169.921, -19.056]), {name: 'Alofi', country: 'Niue'}),
+  ee.Feature(ee.Geometry.Point([145.7546, 15.2137]), {name: 'Capitol Hill', country: 'Northern Mariana Islands'}),
+  ee.Feature(ee.Geometry.Point([134.4792, 7.3419]), {name: 'Koror', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([134.6241, 7.5006]), {name: 'Melekeok', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([134.6242, 7.5006]), {name: 'Ngerulmud', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([147.1494, -9.4789]), {name: 'Port Moresby', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([147.0008, -6.7303]), {name: 'Lae', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([148.2347, -8.7656]), {name: 'Popondetta', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.6572, -6.1478]), {name: 'Mendi', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([155.5667, -6.225]), {name: 'Arawa', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([144.24, -5.86]), {name: 'Mount Hagen', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.8, -5.2167]), {name: 'Madang', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.155, -5.5575]), {name: 'Kimbe', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.6333, -3.55]), {name: 'Wewak', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.3833, -6.0833]), {name: 'Goroka', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([152.2736, -4.35]), {name: 'Kokopo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([146.6467, -7.2]), {name: 'Bulolo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.8, -2.5667]), {name: 'Kavieng', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.4333, -10.3167]), {name: 'Alotau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([142.9506, -5.8489]), {name: 'Tari', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.2, -9.0833]), {name: 'Daru', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([141.2833, -2.6667]), {name: 'Vanimo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([144.9667, -6.0167]), {name: 'Kundiawa', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([141.2264, -5.275]), {name: 'Tabubil', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([146.7167, -7.3389]), {name: 'Wau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([152.1833, -4.2]), {name: 'Rabaul', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([155.6328, -6.2158]), {name: 'Kieta', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.7667, -7.9667]), {name: 'Kerema', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([147.2722, -2.0306]), {name: 'Lorengau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.7217, -5.4919]), {name: 'Wabag', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([154.6711, -5.4297]), {name: 'Sohano', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.41, -5.4746]), {name: 'Hoskins', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([148.565, -10.0426]), {name: 'Amau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([-130.1, -25.0667]), {name: 'Adamstown', country: 'Pitcairn Islands'}),
+  ee.Feature(ee.Geometry.Point([-171.75, -13.8333]), {name: 'Apia', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.8217, -13.8019]), {name: 'Afega', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.4036, -13.4528]), {name: 'Safotu', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.9167, -13.8167]), {name: 'Leulumoega', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.6372, -13.5194]), {name: 'Asau', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.5833, -13.85]), {name: 'Lufilufi', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.3064, -13.7558]), {name: 'Vailoa', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.3335, -13.4501]), {name: 'Saleaula', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.5333, -13.9333]), {name: 'Samamea', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([159.9556, -9.4319]), {name: 'Honiara', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.7, -8.7667]), {name: 'Auki', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([156.8389, -8.1056]), {name: 'Gizo', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([161.9167, -10.45]), {name: 'Kirakira', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([159.5833, -8.1333]), {name: 'Buala', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.1467, -9.1014]), {name: 'Tulagi', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.0706, -11.5583]), {name: 'Tigoa', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([165.8333, -10.7167]), {name: 'Lata', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([-175.2, -21.1333]), {name: 'Nukualofa', country: 'Tonga'}),
+  ee.Feature(ee.Geometry.Point([-173.9831, -18.6508]), {name: 'Neiafu', country: 'Tonga'}),
+  ee.Feature(ee.Geometry.Point([179.2, -8.5167]), {name: 'Funafuti', country: 'Tuvalu'}),
+  ee.Feature(ee.Geometry.Point([168.3167, -17.7333]), {name: 'Port-Vila', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([167.1667, -15.5333]), {name: 'Luganville', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([169.28, -19.53]), {name: 'Isangel', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([167.4208, -16.1069]), {name: 'Lakatoro', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([-176.1833, -13.2833]), {name: 'Mata-Utu', country: 'Wallis and Futuna'}),
+  ee.Feature(ee.Geometry.Point([-178.1585, -14.2961]), {name: 'Leava', country: 'Wallis and Futuna'})
+]);
+
+
+var bufferDist = 1000; 
+var bufferedIslands = pacificIslands.map(function (f) {
+  return f.buffer(bufferDist).copyProperties(f);
+});
+
+
+var year = 2020; 
+var landcover = ee.ImageCollection('MODIS/061/MCD12Q1')
+  .filter(ee.Filter.calendarRange(year, year, 'year'))
+  .first()
+  .select('LC_Type1');
+
+
+var lcLabels = ee.Dictionary({
+  0:'Water',1:'Evergreen Needleleaf Forest',2:'Evergreen Broadleaf Forest',
+  3:'Deciduous Needleleaf Forest',4:'Deciduous Broadleaf Forest',5:'Mixed Forests',
+  6:'Closed Shrublands',7:'Open Shrublands',8:'Woody Savannas',9:'Savannas',
+  10:'Grasslands',11:'Permanent Wetlands',12:'Croplands',13:'Urban and Built‑up',
+  14:'Cropland/Natural Mosaic',15:'Snow and Ice',16:'Barren or Sparse',
+  17:'Unclassified'
+});
+
+
+var addMode = function (feature) {
+  var stats = landcover.reduceRegion({
+    reducer: ee.Reducer.mode(),
+    geometry: feature.geometry(),
+    scale: 500,
+    maxPixels: 1e9,
+    bestEffort: true,
+    tileScale: 4
+  });
+  var mode = ee.Number(stats.get('LC_Type1')); // may be null
+  var label = lcLabels.get(mode, 'Unknown');   // default if missing / null
+  return feature.set({LC_code: mode, LC_label: label});
+};
+
+var islandsMode = bufferedIslands.map(addMode);
+
+
+print('Dominant LC per island (1 km buffer, '+year+')', islandsMode);
+
+Map.centerObject(bufferedIslands, 4);
+Map.addLayer(landcover, {min:0, max:17, palette:[
+  '05450a','086a10','54a708','78d203','009900','c6b044','dcd159',
+  'dade48','fbff13','b6ff05','27ff87','c24f44','a5a5a5','ff6d4c',
+  '69fff8','f9ffa4','1c0dff','ffffff']}, 'MCD12Q1 '+year);
+Map.addLayer(bufferedIslands, {color:'red'}, '1 km buffer');
+
+
+Export.table.toDrive({
+  collection: islandsMode,
+  description: 'PacificIslands_MCD12Q1_DominantLC_'+year,
+  fileFormat: 'CSV'
+});
