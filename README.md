@@ -37,4 +37,5 @@ Quality Assurance:
 Data processed using established remote sensing and climatological methods with appropriate spatial and temporal aggregation for the unique geographic characteristics of Pacific Island nations.
 
 CITATION:
-Chen-Cao LW. High-Resolution Climate and Vegetation Index Dataset for 21 Pacific Island Countries and Territories Derived from ERA5 and MODIS (2011-2020). Zenodo; 2025. 
+
+Chen-Cao LW. High-Resolution Climate and Vegetation Index Dataset for 21 Pacific Island Countries and Territories Derived from ERA5 and MODIS (2011-2020). Zenodo; 2025. https://doi.org/10.5281/zenodo.17216289 
