@@ -1,0 +1,210 @@
+var cities = ee.FeatureCollection([
+  ee.Feature(ee.Geometry.Point([-170.7046, -14.274]), {name: 'Pago Pago', country: 'American Samoa'}),
+  ee.Feature(ee.Geometry.Point([-159.771, -21.207]), {name: 'Avarua', country: 'Cook Islands'}),
+  ee.Feature(ee.Geometry.Point([178.4419, -18.1416]), {name: 'Suva', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.4167, -17.8]), {name: 'Nadi', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.5454, -18.0244]), {name: 'Nausori', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.4528, -17.6242]), {name: 'Lautoka', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([179.3703, -16.4311]), {name: 'Labasa', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.4167, -18.1167]), {name: 'Lami', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([178.5167, -18.0667]), {name: 'Nakasi', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.6833, -17.5333]), {name: 'Ba', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([177.5069, -18.1414]), {name: 'Sigatoka', country: 'Fiji'}),
+  ee.Feature(ee.Geometry.Point([-149.5667, -17.5334]), {name: 'Papeete', country: 'French Polynesia'}),
+  ee.Feature(ee.Geometry.Point([144.7332, 13.4692]), {name: 'Maina', country: 'Guam'}),
+  ee.Feature(ee.Geometry.Point([144.7504, 13.4745]), {name: 'Hagatna', country: 'Guam'}),
+  ee.Feature(ee.Geometry.Point([173.0176, 1.3382]), {name: 'Tarawa', country: 'Kiribati'}),
+  ee.Feature(ee.Geometry.Point([172.9333, 1.35]), {name: 'Betio', country: 'Kiribati'}),
+  ee.Feature(ee.Geometry.Point([171.3833, 7.0833]), {name: 'Majuro', country: 'Marshall Islands'}),
+  ee.Feature(ee.Geometry.Point([151.8583, 7.4417]), {name: 'Weno', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([158.1589, 6.9172]), {name: 'Palikir', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([158.2081, 6.9639]), {name: 'Kolonia', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([138.1333, 9.5167]), {name: 'Colonia', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([163.0086, 5.3258]), {name: 'Tofol', country: 'Micronesia, Federated States of'}),
+  ee.Feature(ee.Geometry.Point([166.9209, -0.5477]), {name: 'Yaren', country: 'Nauru'}),
+  ee.Feature(ee.Geometry.Point([166.458, -22.2758]), {name: 'Noumea', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.45, -22.15]), {name: 'Dumbea', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.4665, -22.2157]), {name: 'Mont-Dore', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([166.3505, -22.1337]), {name: 'Paita', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([164.8518, -21.059]), {name: 'Kone', country: 'New Caledonia'}),
+  ee.Feature(ee.Geometry.Point([-169.921, -19.056]), {name: 'Alofi', country: 'Niue'}),
+  ee.Feature(ee.Geometry.Point([145.7546, 15.2137]), {name: 'Capitol Hill', country: 'Northern Mariana Islands'}),
+  ee.Feature(ee.Geometry.Point([134.4792, 7.3419]), {name: 'Koror', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([134.6241, 7.5006]), {name: 'Melekeok', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([134.6242, 7.5006]), {name: 'Ngerulmud', country: 'Palau'}),
+  ee.Feature(ee.Geometry.Point([147.1494, -9.4789]), {name: 'Port Moresby', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([147.0008, -6.7303]), {name: 'Lae', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([148.2347, -8.7656]), {name: 'Popondetta', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.6572, -6.1478]), {name: 'Mendi', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([155.5667, -6.225]), {name: 'Arawa', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([144.24, -5.86]), {name: 'Mount Hagen', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.8, -5.2167]), {name: 'Madang', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.155, -5.5575]), {name: 'Kimbe', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.6333, -3.55]), {name: 'Wewak', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.3833, -6.0833]), {name: 'Goroka', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([152.2736, -4.35]), {name: 'Kokopo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([146.6467, -7.2]), {name: 'Bulolo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.8, -2.5667]), {name: 'Kavieng', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.4333, -10.3167]), {name: 'Alotau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([142.9506, -5.8489]), {name: 'Tari', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.2, -9.0833]), {name: 'Daru', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([141.2833, -2.6667]), {name: 'Vanimo', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([144.9667, -6.0167]), {name: 'Kundiawa', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([141.2264, -5.275]), {name: 'Tabubil', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([146.7167, -7.3389]), {name: 'Wau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([152.1833, -4.2]), {name: 'Rabaul', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([155.6328, -6.2158]), {name: 'Kieta', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([145.7667, -7.9667]), {name: 'Kerema', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([147.2722, -2.0306]), {name: 'Lorengau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([143.7217, -5.4919]), {name: 'Wabag', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([154.6711, -5.4297]), {name: 'Sohano', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([150.41, -5.4746]), {name: 'Hoskins', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([148.565, -10.0426]), {name: 'Amau', country: 'Papua New Guinea'}),
+  ee.Feature(ee.Geometry.Point([-130.1, -25.0667]), {name: 'Adamstown', country: 'Pitcairn Islands'}),
+  ee.Feature(ee.Geometry.Point([-171.75, -13.8333]), {name: 'Apia', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.8217, -13.8019]), {name: 'Afega', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.4036, -13.4528]), {name: 'Safotu', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.9167, -13.8167]), {name: 'Leulumoega', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.6372, -13.5194]), {name: 'Asau', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.5833, -13.85]), {name: 'Lufilufi', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.3064, -13.7558]), {name: 'Vailoa', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-172.3335, -13.4501]), {name: 'Saleaula', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([-171.5333, -13.9333]), {name: 'Samamea', country: 'Samoa'}),
+  ee.Feature(ee.Geometry.Point([159.9556, -9.4319]), {name: 'Honiara', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.7, -8.7667]), {name: 'Auki', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([156.8389, -8.1056]), {name: 'Gizo', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([161.9167, -10.45]), {name: 'Kirakira', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([159.5833, -8.1333]), {name: 'Buala', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.1467, -9.1014]), {name: 'Tulagi', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([160.0706, -11.5583]), {name: 'Tigoa', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([165.8333, -10.7167]), {name: 'Lata', country: 'Solomon Islands'}),
+  ee.Feature(ee.Geometry.Point([-175.2, -21.1333]), {name: 'Nukualofa', country: 'Tonga'}),
+  ee.Feature(ee.Geometry.Point([-173.9831, -18.6508]), {name: 'Neiafu', country: 'Tonga'}),
+  ee.Feature(ee.Geometry.Point([179.2, -8.5167]), {name: 'Funafuti', country: 'Tuvalu'}),
+  ee.Feature(ee.Geometry.Point([168.3167, -17.7333]), {name: 'Port-Vila', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([167.1667, -15.5333]), {name: 'Luganville', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([169.28, -19.53]), {name: 'Isangel', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([167.4208, -16.1069]), {name: 'Lakatoro', country: 'Vanuatu'}),
+  ee.Feature(ee.Geometry.Point([-176.1833, -13.2833]), {name: 'Mata-Utu', country: 'Wallis and Futuna'}),
+  ee.Feature(ee.Geometry.Point([-178.1585, -14.2961]), {name: 'Leava', country: 'Wallis and Futuna'})
+]);
+
+// Create 1km buffer around each city point
+var bufferedCities = cities.map(function(feature) {
+  return feature.buffer(1000).set({
+    'name': feature.get('name'),
+    'country': feature.get('country')
+  });
+});
+
+// Set date range
+var startDate = '2012-01-02';
+var endDate = '2012-12-31';
+
+// Daily mean 2m air temperature
+var era5_2mt = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('mean_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+
+// Daily max 2m air temperature
+var era5_2mt_max = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('maximum_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+                  
+// Daily min 2m air temperature
+var era5_2mt_min = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                  .select('minimum_2m_air_temperature')
+                  .filter(ee.Filter.date(startDate, endDate));
+                  
+//precipitation
+var era5_tp = ee.ImageCollection('ECMWF/ERA5/DAILY')
+                 .select('total_precipitation')
+                 .filter(ee.Filter.date(startDate, endDate));
+
+//Kelvin to Celsius for temperature
+var kelvinToCelsius = function(image) {
+  return image.subtract(273.15).set(
+      'system:time_start', image.get('system:time_start'));
+};
+
+var era5_2mt_celsius = era5_2mt.map(kelvinToCelsius);
+var era5_2mt_max_celsius = era5_2mt_max.map(kelvinToCelsius);
+var era5_2mt_min_celsius = era5_2mt_min.map(kelvinToCelsius);
+
+//extract data for a single image
+var extractDataForImage = function(image, bandName) {
+  var date = ee.Date(image.get('system:time_start')).format('YYYY-MM-dd');
+  
+// Extract data for each city
+  var citiesData = bufferedCities.map(function(city) {
+    var stats = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: city.geometry(),
+      scale: 10000,
+      maxPixels: 1e9
+    });
+    
+    return ee.Feature(null, {
+      'city': city.get('name'),
+      'country': city.get('country'),  
+      'date': date,
+      'value': stats.get(bandName)
+    });
+  });
+  
+  return citiesData;
+};
+
+// Extract temperature
+var meanTempData = era5_2mt_celsius.map(function(image) {
+  return extractDataForImage(image, 'mean_2m_air_temperature');
+}).flatten();
+
+var maxTempData = era5_2mt_max_celsius.map(function(image) {
+  return extractDataForImage(image, 'maximum_2m_air_temperature');
+}).flatten();
+
+var minTempData = era5_2mt_min_celsius.map(function(image) {
+  return extractDataForImage(image, 'minimum_2m_air_temperature');
+}).flatten();
+
+// Extract precipitation
+var precipitationData = era5_tp.map(function(image) {
+  return extractDataForImage(image, 'total_precipitation');
+}).flatten();
+
+// Export data
+Export.table.toDrive({
+  collection: meanTempData,
+  description: 'mean_temperature_2012',
+  fileFormat: 'CSV',
+  selectors: ['city', 'country', 'date', 'value'] 
+});
+
+Export.table.toDrive({
+  collection: maxTempData,
+  description: 'max_temperature_2012',
+  fileFormat: 'CSV',
+  selectors: ['city', 'country', 'date', 'value'] 
+});
+
+Export.table.toDrive({
+  collection: minTempData,
+  description: 'min_temperature_2012',
+  fileFormat: 'CSV',
+  selectors: ['city', 'country', 'date', 'value'] 
+});
+
+Export.table.toDrive({
+  collection: precipitationData,
+  description: 'total_precipitation_2012',
+  fileFormat: 'CSV',
+  selectors: ['city', 'country', 'date', 'value'] 
+});
+
+//summary
+print('Number of cities:', bufferedCities.size());
+print('Number of mean temperature data points:', meanTempData.size());
+print('Number of max temperature data points:', maxTempData.size());
+print('Number of min temperature data points:', minTempData.size());
+print('Number of precipitation data points:', precipitationData.size());
