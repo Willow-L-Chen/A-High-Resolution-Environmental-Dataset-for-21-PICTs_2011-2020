@@ -89,12 +89,12 @@ var cities = ee.FeatureCollection([
   ee.Feature(ee.Geometry.Point([-178.1585, -14.2961]), {name: 'Leava', country: 'Wallis and Futuna'})
 ]);
 
-// 2. Buffer each city by 1 km **and keep its properties**:
+// Buffer each city by 1 km **and keep its properties**:
 var bufferedCities = cities.map(function(f) {
 return f.setGeometry(f.geometry().buffer(1000));
 });
 
-// 3. Load & scale the MODIS NDVI collection (unchanged)
+//Load & scale the MODIS NDVI collection (unchanged)
 var ndvi = ee.ImageCollection('MODIS/MOD09GA_006_NDVI')
   .filterDate('2018-01-01', '2018-08-26')
   .select('NDVI')
@@ -103,7 +103,7 @@ var ndvi = ee.ImageCollection('MODIS/MOD09GA_006_NDVI')
       .copyProperties(img, ['system:time_start']);
   });
 
-// 4. Reduce each image over all buffered cities, **naming** the output 'ndvi'
+//Reduce each image over all buffered cities, **naming** the output 'ndvi'
 var perImage = ndvi.map(function(img) {
   var date = img.date().format('YYYY-MM-dd');
   var stats = img.reduceRegions({
@@ -117,7 +117,7 @@ var perImage = ndvi.map(function(img) {
 }).flatten();
 
 
-// 5. Export to Drive if you like
+//Export to Drive if you like
 Export.table.toDrive({
   collection: perImage,
   description: 'Pacific_Cities_NDVI_2018',
